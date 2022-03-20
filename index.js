@@ -123,4 +123,4 @@ app.get('/news/:newspaperId', async (req, res) => {
 })
 
 
-app.listen(PORT, () => console.log(`server running on PORT ${PORT}`));
+app.listen(process.env.PORT||3000, () => console.log(`server running on PORT ${this.address().PORT}`));
