@@ -7,6 +7,9 @@ const http = require('http');
 const res = require('express/lib/response');
 const app = express();
 const server = http.createServer(app);
+var cors = require('cors')
+
+app.use(cors())
 const newspapers = [
     {
         name: 'cityam',
@@ -130,5 +133,8 @@ app.get('/news/:newspaperId', async (req, res) => {
     
 })
 
-server.listen(process.env.PORT||3000);
-console.log('Express server started on port ' + server.address().port);
+server.listen(process.env.PORT||3000, () => {
+    const port = server.address().port;
+  console.log(`Express is working on port ${port}`);
+});
+
