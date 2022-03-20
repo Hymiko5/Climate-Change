@@ -3,9 +3,9 @@ const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { response } = require('express');
-
+const http = require('http');
 const app = express();
-
+const server = http.createServer(app);
 const newspapers = [
     {
         name: 'cityam',
@@ -122,5 +122,5 @@ app.get('/news/:newspaperId', async (req, res) => {
         }).catch(err => console.log(err));
 })
 
-
-app.listen(process.env.PORT||3000, () => console.log(`server running on PORT ${this.address().PORT}`));
+server.listen(process.env.PORT||3000);
+console.log('Express server started on port ' + server.address().port);
