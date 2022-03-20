@@ -85,7 +85,7 @@ newspapers.forEach(newspaper => {
                     source: newspaper.name
                 });
         })
-}).catch(err => res.send(err));
+}).catch(err => console.log(err));
 })
 
 
@@ -103,10 +103,12 @@ app.get('/news', (req, res) => {
 app.get('/news/:newspaperId', async (req, res) => {
     const newspaperId = req.params.newspaperId;
 
-    const newspaperAddress = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].address;
-
-    const newspaperBase = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].base;
-    axios.get(newspaperAddress)
+    const newspaper = newspapers.filter(newspaper => newspaper.name == newspaperId);
+    console.log(newspaper);
+    if(newspaper.length > 0){
+        const newspaperAddress = newspaper[0].address;
+        const newspaperBase = newspaper[0].base;
+        axios.get(newspaperAddress)
         .then(response => {
             const html = response.data;
             const $ = cheerio.load(html);
@@ -121,7 +123,11 @@ app.get('/news/:newspaperId', async (req, res) => {
                 })
             })
             res.json(specificArticles);
-        }).catch(err => res.send(err));
+        }).catch(err => console.log(err));
+    } else {
+        res.send({"Error": "Wrong newspaper" });
+    }
+    
 })
 
 server.listen(process.env.PORT||3000);
