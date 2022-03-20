@@ -4,6 +4,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const { response } = require('express');
 const http = require('http');
+const res = require('express/lib/response');
 const app = express();
 const server = http.createServer(app);
 const newspapers = [
@@ -84,7 +85,7 @@ newspapers.forEach(newspaper => {
                     source: newspaper.name
                 });
         })
-}).catch(err => console.log(err));
+}).catch(err => res.send(err));
 })
 
 
@@ -102,8 +103,9 @@ app.get('/news', (req, res) => {
 app.get('/news/:newspaperId', async (req, res) => {
     const newspaperId = req.params.newspaperId;
 
-    const newspaperAddress = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].address;
-    newspaperBase = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].base;
+    const newspaper = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].address;
+
+    const newspaperBase = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].base;
     axios.get(newspaperAddress)
         .then(response => {
             const html = response.data;
@@ -119,7 +121,7 @@ app.get('/news/:newspaperId', async (req, res) => {
                 })
             })
             res.json(specificArticles);
-        }).catch(err => console.log(err));
+        }).catch(err => res.send(err));
 })
 
 server.listen(process.env.PORT||3000);
